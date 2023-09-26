@@ -6,6 +6,7 @@ require "./CSRF.php";
 // Periksa jika formulir telah dikirim
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validasi token CSRF
+
     if (CSRF::validate($_POST['token'])) {
         // Ambil data dari formulir
         $nama_buku = $_POST['nama_buku'];
@@ -23,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Eksekusi pernyataan SQL
         if ($koneksi->query($sql) === TRUE) {
             echo "Data buku telah berhasil disimpan.";
+            header("Location:list_buku.php");
         } else {
             echo "Error: " . $sql . "<br>" . $koneksi->error;
         }
@@ -52,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="container">
 <div class="card">
     <h2>Form Buku</h2>
-    <form action="./list_buku.php" method="post" class="form-container">
+    <form  method="post" class="form-container">
         <?php CSRF::create_token(); ?>
         <div class="form-column-left">
             <!-- Kolom kiri -->

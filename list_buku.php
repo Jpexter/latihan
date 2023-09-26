@@ -2,13 +2,7 @@
 include "conn.php"; 
 require "./CSRF.php";
 
-if(CSRF::validate($_POST['token']))
-{
-    echo "continue to database";
-}else{ exit ("Failed to validate CSRF token"); }
-
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
