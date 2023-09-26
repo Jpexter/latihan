@@ -1,34 +1,99 @@
+<?php
+session_start();
+include "conn.php";
+include "csrf_token.php";
+
+// Memeriksa apakah ada parameter 'id' dalam URL
+if (isset($_GET['id'])) {
+    $id_buku = $_GET['id'];
+
+    // Query untuk mengambil data buku berdasarkan ID
+    $query = "SELECT * FROM tb_buku WHERE id_buku = $id_buku";
+    $result = mysqli_query($koneksi, $query);
+
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+    } else {
+        echo "Buku tidak ditemukan.";
+        exit;
+    }
+} else {
+    echo "ID buku tidak valid.";
+    exit;
+}
+
+// Memeriksa apakah form update telah disubmit
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Memeriksa validitas token CSRF
+    if (isset($_POST['csrf_token']) && isCsrfTokenValid($_POST['csrf_token'])) {
+        // Token CSRF valid, lanjutkan pemrosesan form update
+
+        // Mengambil data dari formulir update
+        $id_buku = $_POST['id_buku'];
+        $nama_buku = $_POST['nama'];
+        $penerbit = $_POST['penerbit'];
+        $tahun = $_POST['tahun'];
+        $pengarang = $_POST['pengarang'];
+        $jumlah_halaman = $_POST['jumlah_halaman'];
+        $sinopsis = $_POST['sinopsis'];
+
+        // Query untuk melakukan update data buku
+        $query = "UPDATE tb_buku SET
+                  nama_buku = '$nama_buku',
+                  penerbit = '$penerbit',
+                  tahun = '$tahun',
+                  pengarang = '$pengarang',
+                  jumlah_halaman = '$jumlah_halaman',
+                  sinopsis = '$sinopsis'
+                  WHERE id_buku = $id_buku";
+
+        if (mysqli_query($koneksi, $query)) {
+            // Data buku berhasil diperbarui, alihkan ke halaman daftar buku
+            header("Location: list_buku.php");
+            exit;
+        } else {
+            echo "Error: " . mysqli_error($koneksi);
+        }
+    } else {
+        echo "Token CSRF tidak valid. Tindakan tidak diizinkan.";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Form Card</title>
+    <title>Form Update Buku</title>
     <link rel="stylesheet" href="css/update.css">
 </head>
 <body>
     <div class="card">
-        <h2>Formulir Contoh</h2>
-        <form action="proses_form.php" method="POST">
+        <h2>Formulir Update Buku</h2>
+        <form action="" method="POST">
             <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
 
+            <input type="hidden" name="id_buku" value="<?= $row['id_buku'] ?>">
+
+            <!-- Input fields untuk mengupdate data buku -->
             <label for="nama">Nama Buku:</label><br>
-            <input type="text" id="nama" name="nama" required><br><br>
+            <input type="text" id="nama" name="nama" value="<?= $row['nama_buku'] ?>" required><br><br>
 
-            <label for="email">Penerbit:</label><br>
-            <input type="text" id="penerbit" name="penerbit" required><br><br>
+            <label for="penerbit">Penerbit:</label><br>
+            <input type="text" id="penerbit" name="penerbit" value="<?= $row['penerbit'] ?>" required><br><br>
 
-            <label for="pesan">tahun:</label><br>
-            <input type="number" id="tahun" name="tahun" required><br><br>
-            
-            <label for="pesan">Pengarang:</label><br>
-            <input type="text" id="pengarang" name="pengarang" required><br><br>
-            
-            <label for="pesan">Jumlah Halaman:</label><br>
-            <input type="number" id="jumlah_halaman" name="jumlah_halaman" required><br><br>
+            <label for="tahun">Tahun:</label><br>
+            <input type="number" id="tahun" name="tahun" value="<?= $row['tahun'] ?>" required><br><br>
 
-            <label for="pesan">Jumlah Halaman:</label><br>
-            <textarea type="number" id="jumlah_halaman" name="jumlah_halaman" required></textarea><br><br>
+            <label for="pengarang">Pengarang:</label><br>
+            <input type="text" id="pengarang" name="pengarang" value="<?= $row['pengarang'] ?>" required><br><br>
 
-            <input type="submit" value="Kirim">
+            <label for="jumlah_halaman">Jumlah Halaman:</label><br>
+            <input type="number" id="jumlah_halaman" name="jumlah_halaman" value="<?= $row['jumlah_halaman'] ?>" required><br><br>
+
+            <label for="sinopsis">Sinopsis:</label><br>
+            <textarea id="sinopsis" name="sinopsis" required><?= $row['sinopsis'] ?></textarea><br><br>
+
+            <input type="submit" value="Update">
         </form>
     </div>
 </body>

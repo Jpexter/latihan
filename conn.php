@@ -21,4 +21,5 @@
         
 
         // Tutup koneksi
-        mysqli_close($koneksi);
+        // mysqli_close($koneksi);
+?>
