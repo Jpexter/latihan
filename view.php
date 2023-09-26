@@ -80,8 +80,13 @@ if (isset($_GET['id'])) {
         </tr>
         <tr>
             <td>Update at:</td>
+            <?php if($row['update_at']) : ?>
             <td><?=date('l, j F Y G:i:s ', strtotime($row['update_at']))?></td>
+            <?php else: ?>
+            <td>-</td>
+            <?php endif; ?>
         </tr>
+
         <tr>
             <td>finish at:</td>
             <td><?=date('l, j F Y G:i:s ', strtotime($row['finish_at'] ))?></td>
