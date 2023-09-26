@@ -3,16 +3,23 @@ session_start();
 include "conn.php";
 include "csrf_token.php";
 
+date_default_timezone_set("Asia/Jakarta");
+$update_at = date('Y-m-d H:i:s');
+
 // Memeriksa apakah ada parameter 'id' dalam URL
 if (isset($_GET['id'])) {
     $id_buku = $_GET['id'];
 
     // Query untuk mengambil data buku berdasarkan ID
-    $query = "SELECT * FROM tb_buku WHERE id_buku = $id_buku";
+    $query = "SELECT * FROM tb_buku WHERE id_buku = $id_buku"; // Mengambil data buku
     $result = mysqli_query($koneksi, $query);
 
     if ($result && mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
+
+        // Update kolom 'update_at' ke waktu saat halaman form dibuka
+        $updateQuery = "UPDATE tb_buku SET update_at = NOW() WHERE id_buku = $id_buku";
+        mysqli_query($koneksi, $updateQuery);
     } else {
         echo "Buku tidak ditemukan.";
         exit;
@@ -36,7 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pengarang = $_POST['pengarang'];
         $jumlah_halaman = $_POST['jumlah_halaman'];
         $sinopsis = $_POST['sinopsis'];
-
+        $update_at = $_POST['update_at'];
+        
         // Query untuk melakukan update data buku
         $query = "UPDATE tb_buku SET
                   nama_buku = '$nama_buku',
@@ -44,7 +52,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   tahun = '$tahun',
                   pengarang = '$pengarang',
                   jumlah_halaman = '$jumlah_halaman',
-                  sinopsis = '$sinopsis'
+                  sinopsis = '$sinopsis',
+                  update_at = '$update_at',
+                  finish_at = NOW()  -- Mengubah kolom 'finish_at' saat formulir diterima
                   WHERE id_buku = $id_buku";
 
         if (mysqli_query($koneksi, $query)) {
@@ -59,7 +69,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+<!-- Kode HTML di sini -->
 
+
+<!-- $$updateQuery = $_POST['update_at']; -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -92,6 +105,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <label for="sinopsis">Sinopsis:</label><br>
             <textarea id="sinopsis" name="sinopsis" required><?= $row['sinopsis'] ?></textarea><br><br>
+
+            <input type="hidden" name="update_at" value="<?= $update_at ?>">
 
             <input type="submit" value="Update">
         </form>

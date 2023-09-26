@@ -1,14 +1,4 @@
-<?php 
-include "conn.php"; 
-require "./CSRF.php";
-
-if(CSRF::validate($_POST['token']))
-{
-    echo "continue to database";
-}else{ exit ("Failed to validate CSRF token"); }
-
-?>
-
+<?php include "conn.php" ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,11 +50,6 @@ if(CSRF::validate($_POST['token']))
             margin-bottom: 10px;
         }
 
-        .tambah a {
-            text-decoration: none;
-            color: #fff;
-        }
-
         td button:hover {
             background-color: #0056b3;
         }
@@ -72,13 +57,12 @@ if(CSRF::validate($_POST['token']))
 </head>
 <body>
     <div class="table-container">
-        <button class="tambah">
-            <a href="tambah_data.php">Tambah Data</a>
-        </button>
+        <button class="tambah">Tambah Data</button>
     </div>
         <table border="1">
             <tr>
-                <th>No</th>
+                <th>no</th>
+                <th>id</th>
                 <th>Nama</th>
                 <th>Penerbit</th>
                 <th>Tahun</th>
@@ -88,8 +72,11 @@ if(CSRF::validate($_POST['token']))
                 <th>Action</th>
             </tr>
             <tr>
-            <?php foreach ($result as $row): ?>
+            <?php $no = 1; ?>
+            <?php foreach ($result as $row):  ?>
             <tr>
+                <td><?= $no?></td>
+                <?php $no++ ?>
                 <td><?= $row['id_buku'] ?></td>
                 <td><?= $row['nama_buku'] ?></td>
                 <td><?= $row['penerbit'] ?></td>
@@ -102,7 +89,10 @@ if(CSRF::validate($_POST['token']))
                     <input type="hidden" name="id" value="<?= $row['id_buku'] ?>">
                     <button type="submit">Update</button>
                 </form>
-                    <a href="">View</a>
+                <form action="view.php" method="GET">
+                    <input type="hidden" name="id" value="<?= $row['id_buku'] ?>">
+                    <button type="submit">View</button> 
+                </form>     
                 </td>
             </tr>
         <?php endforeach; ?>
