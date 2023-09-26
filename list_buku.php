@@ -1,12 +1,7 @@
-<<<<<<< HEAD
-<?php include "conn.php" ?>
-=======
 <?php 
 include "conn.php"; 
-require "./CSRF.php";
-
 ?>
->>>>>>> 2dbe01c45b295f738400053faf8ff296b438d7a3
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -65,7 +60,7 @@ require "./CSRF.php";
 </head>
 <body>
     <div class="table-container">
-        <button class="tambah">Tambah Data</button>
+        <button class="tambah.php">Tambah Data</button>
     </div>
         <table border="1">
             <tr>
