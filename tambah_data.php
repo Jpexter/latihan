@@ -3,10 +3,13 @@
 include "conn.php"; 
 require "./CSRF.php";
 
+date_default_timezone_set("Asia/Jakarta");
+$new_start_at = date("Y-m-d H:i:s");
+
 // Periksa jika formulir telah dikirim
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validasi token CSRF
-
+    
     if (CSRF::validate($_POST['token'])) {
         // Ambil data dari formulir
         $nama_buku = $_POST['nama_buku'];
@@ -15,10 +18,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pengarang = $_POST['pengarang'];
         $jumlah_halaman = $_POST['jumlah_halaman'];
         $sinopsis = $_POST['sinopsis'];
-
+        $start_at = $_POST['start_at'];
+       
         // Persiapkan pernyataan SQL untuk menyimpan data ke dalam tabel
-        $sql = "INSERT INTO tb_buku (nama_buku, penerbit, tahun, pengarang, jumlah_halaman, sinopsis)
-        VALUES ('$nama_buku', '$penerbit', '$tahun', '$pengarang', '$jumlah_halaman', '$sinopsis')";
+        $sql = "INSERT INTO tb_buku (nama_buku, penerbit, tahun, pengarang, jumlah_halaman, sinopsis, start_at, finish_at)
+        VALUES ('$nama_buku', '$penerbit', '$tahun', '$pengarang', '$jumlah_halaman', '$sinopsis','$start_at', NOW())";
 
 
         // Eksekusi pernyataan SQL
@@ -64,15 +68,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="text" name="penerbit" id="penerbit" placeholder="Penerbit...">
             <label for="tahun">Tahun Terbit</label>
             <input type="text" name="tahun" id="tahun" placeholder="Tahun Terbit...">
+            <label for="pengarang">Pengarang</label>
+            <input type="text" name="pengarang" id="pengarang" placeholder="Pengarang...">
         </div>
         <div class="form-column-right">
             <!-- Kolom kanan -->
-            <label for="pengarang">Pengarang</label>
-            <input type="text" name="pengarang" id="pengarang" placeholder="Pengarang...">
             <label for="jumlah_halaman">Jumlah Halaman</label>
             <input type="text" name="jumlah_halaman" id="jumlah_halaman" placeholder="Jumlah Halaman...">
             <label for="sinopsis">Sinopsis</label>
             <textarea name="sinopsis" id="sinopsis" placeholder="Sinopsis..."></textarea>
+            <input type="hidden" value="<?= $new_start_at;?>" name="start_at">
         </div>
         <div class="form-column-left">
             <!-- Kolom kiri -->
