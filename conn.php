@@ -19,6 +19,3 @@
         // Eksekusi query
         $result = mysqli_query($koneksi, $query);
         
-
-        // Tutup koneksi
-        // mysqli_close($koneksi);
