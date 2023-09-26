@@ -21,5 +21,3 @@
         
 
         // Tutup koneksi
-        // mysqli_close($koneksi);
-?>

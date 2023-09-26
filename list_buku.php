@@ -1,4 +1,12 @@
+<<<<<<< HEAD
 <?php include "conn.php" ?>
+=======
+<?php 
+include "conn.php"; 
+require "./CSRF.php";
+
+?>
+>>>>>>> 2dbe01c45b295f738400053faf8ff296b438d7a3
 <!DOCTYPE html>
 <html lang="en">
 <head>
