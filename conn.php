@@ -14,7 +14,7 @@
         }
 
         // Query untuk mengambil data dari tabel
-        $query = "SELECT * FROM tb_buku";
+        $query = "SELECT id_buku, nama_buku, penerbit, tahun, pengarang, jumlah_halaman, sinopsis FROM tb_buku ORDER BY id_buku DESC";
 
         // Eksekusi query
         $result = mysqli_query($koneksi, $query);

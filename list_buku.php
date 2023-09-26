@@ -54,11 +54,6 @@ require "./CSRF.php";
             margin-bottom: 10px;
         }
 
-        .tambah a {
-            text-decoration: none;
-            color: #fff;
-        }
-
         td button:hover {
             background-color: #0056b3;
         }
@@ -66,13 +61,12 @@ require "./CSRF.php";
 </head>
 <body>
     <div class="table-container">
-        <button class="tambah">
-            <a href="tambah_data.php">Tambah Data</a>
-        </button>
+        <button class="tambah">Tambah Data</button>
     </div>
         <table border="1">
             <tr>
-                <th>No</th>
+                <th>no</th>
+                <th>id</th>
                 <th>Nama</th>
                 <th>Penerbit</th>
                 <th>Tahun</th>
@@ -82,33 +76,30 @@ require "./CSRF.php";
                 <th>Action</th>
             </tr>
             <tr>
-                
-                <td>1</td>
-                <td>John</td>
-                <td>ABC Publisher</td>
-                <td>2022</td>
-                <td>Jane Doe</td>
-                <td>300</td>
-                <td>Sebuah sinopsis buku ini...</td>
-                <td><button>Edit</button> 
-                <button>Delete</button></td>
+            <?php $no = 1; ?>
+            <?php foreach ($result as $row):  ?>
+            <tr>
+                <td><?= $no?></td>
+                <?php $no++ ?>
+                <td><?= $row['id_buku'] ?></td>
+                <td><?= $row['nama_buku'] ?></td>
+                <td><?= $row['penerbit'] ?></td>
+                <td><?= $row['tahun'] ?></td>
+                <td><?= $row['pengarang'] ?></td>
+                <td><?= $row['jumlah_halaman'] ?></td>
+                <td><?= $row['sinopsis'] ?></td>
+                <td>
+                <form action="update.php" method="GET">
+                    <input type="hidden" name="id" value="<?= $row['id_buku'] ?>">
+                    <button type="submit">Update</button>
+                </form>
+                <form action="view.php" method="GET">
+                    <input type="hidden" name="id" value="<?= $row['id_buku'] ?>">
+                    <button type="submit">View</button> 
+                </form>     
+                </td>
             </tr>
-            <?php
-        
-
-        foreach ($result as $row) {
-            echo "<tr>";
-            echo "<td>" . $row['id_buku'] . "</td>";
-            echo "<td>" . $row['nama_buku'] . "</td>";
-            echo "<td>" . $row['penerbit'] . "</td>";
-            echo "<td>" . $row['tahun'] . "</td>";
-            echo "<td>" . $row['pengarang'] . "</td>";
-            echo "<td>" . $row['jumlah_halaman'] . "</td>";
-            echo "<td>" . $row['sinopsis'] . "</td>";
-            echo "<td><button>Edit</button> <button>Delete</button></td>";
-            echo "</tr>";
-         }
-        ?>
+        <?php endforeach; ?>
         </table>
 </body>
 </html>
