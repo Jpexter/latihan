@@ -52,6 +52,11 @@ include "conn.php";
             margin-bottom: 10px;
         }
 
+        .link {
+            text-decoration: none;
+            color: #fff;
+        }
+
         td button:hover {
             background-color: #0056b3;
         }
@@ -59,7 +64,9 @@ include "conn.php";
 </head>
 <body>
     <div class="table-container">
-        <button class="tambah.php">Tambah Data</button>
+        <button class="tambah">
+            <a href="./tambah_data.php" class="link">Tambah Data</a>
+        </button>
     </div>
         <table border="1">
             <tr>
