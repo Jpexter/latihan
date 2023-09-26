@@ -1,4 +1,14 @@
-<?php include "conn.php" ?>
+<?php 
+include "conn.php"; 
+require "./CSRF.php";
+
+if(CSRF::validate($_POST['token']))
+{
+    echo "continue to database";
+}else{ exit ("Failed to validate CSRF token"); }
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -50,6 +60,11 @@
             margin-bottom: 10px;
         }
 
+        .tambah a {
+            text-decoration: none;
+            color: #fff;
+        }
+
         td button:hover {
             background-color: #0056b3;
         }
@@ -57,7 +72,9 @@
 </head>
 <body>
     <div class="table-container">
-        <button class="tambah">Tambah Data</button>
+        <button class="tambah">
+            <a href="tambah_data.php">Tambah Data</a>
+        </button>
     </div>
         <table border="1">
             <tr>
